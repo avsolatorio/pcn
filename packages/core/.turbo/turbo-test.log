@@ -1,0 +1,18 @@
+
+
+> @pcn/core@0.1.0 test /Users/avsolatorio/WBG/pcn/packages/core
+> vitest run
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/Users/avsolatorio/WBG/pcn/packages/core[39m
+
+ [32m✓[39m [2mtest/[22mfixtures[2m.test.ts[22m[2m (1)[22m
+   [32m✓[39m spec fixtures[2m (1)[22m
+     [32m✓[39m matches specs/fixtures/cases.json
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 23:17:36
+[2m   Duration [22m 602ms[2m (transform 184ms, setup 0ms, collect 187ms, tests 3ms, environment 0ms, prepare 120ms)[22m
+
+[?25h

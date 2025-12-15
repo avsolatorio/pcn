@@ -1,0 +1,30 @@
+{
+  "name": "@pcn/fixtures",
+  "version": "0.1.0",
+  "description": "Proof-Carrying Numbers (PCN): shared fixtures and test vectors.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./cases.json": "./cases.json"
+  },
+  "files": [
+    "dist",
+    "cases.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "node -e \"console.log('ok')\""
+  }
+}

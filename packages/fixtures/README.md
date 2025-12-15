@@ -1,0 +1,3 @@
+# @pcn/fixtures
+
+Shared fixtures.

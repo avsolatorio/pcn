@@ -1,0 +1,6 @@
+
+
+> @pcn/fixtures@0.1.0 test /Users/avsolatorio/WBG/pcn/packages/fixtures
+> node -e "console.log('ok')"
+
+ok

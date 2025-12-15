@@ -1,0 +1,58 @@
+[
+  {
+    "id": "gdp",
+    "innerText": "3.2B",
+    "policy": {
+      "type": "abbr"
+    },
+    "claim": {
+      "value": 3200000000
+    },
+    "expect": true
+  },
+  {
+    "id": "share",
+    "innerText": "12%",
+    "policy": {
+      "type": "percent"
+    },
+    "claim": {
+      "value": "0.12"
+    },
+    "expect": true
+  },
+  {
+    "id": "tol",
+    "innerText": "102",
+    "policy": {
+      "type": "tolerance",
+      "tolerance": 0.02
+    },
+    "claim": {
+      "value": 100
+    },
+    "expect": true
+  },
+  {
+    "id": "rng",
+    "innerText": "10-20",
+    "policy": {
+      "type": "range"
+    },
+    "claim": {
+      "value": 15
+    },
+    "expect": true
+  },
+  {
+    "id": "yr",
+    "innerText": "2021",
+    "policy": {
+      "type": "year"
+    },
+    "claim": {
+      "value": "2021-07-01"
+    },
+    "expect": true
+  }
+]
