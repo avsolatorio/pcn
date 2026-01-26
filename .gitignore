@@ -4,3 +4,25 @@ dist
 __pycache__
 .pytest_cache
 .DS_Store
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.env
+*.secret
+*.key
+secrets/
+*.pem
+*.p12
+*.pfx
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db

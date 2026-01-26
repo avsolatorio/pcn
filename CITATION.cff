@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: "Proof-Carrying Numbers (PCN)"
+abstract: "A presentation-layer protocol that enforces numeric fidelity in LLM-generated content through mechanical verification. PCN ensures that numbers displayed to users are verified against source data, highlighting numeric hallucinations when they occur and establishing trust through proof."
+authors:
+  - affiliation: The World Bank Group
+    name: Aivin V. Solatorio
+keywords:
+  - LLM
+  - Numeric Hallucination
+  - Verification
+  - Proof-Carrying
+  - Trust
+  - AI Safety
+repository-code: https://github.com/avsolatorio/pcn
+license: MIT
+type: software

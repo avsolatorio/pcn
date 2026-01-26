@@ -2,6 +2,14 @@
 
 **Proof-Carrying Numbers (PCN)** is a presentation-layer protocol that enforces numeric fidelity in LLM-generated content through mechanical verification. PCN ensures that numbers displayed to users are verified against source data, highlighting numeric hallucinations when they occur and establishing trust through proof.
 
+> **Audience**: This project is designed for developers, researchers, and organizations working with LLM-generated content where numeric accuracy is critical, including financial reporting, scientific data presentation, development data dissemination, and regulatory compliance applications.
+
+
+<!-- Screenshot placeholder: Add a screenshot or diagram showing PCN verification in action -->
+
+![PCN Verification in Action](docs/imgs/pcn-diagram.png)
+
+
 ## The Problem: Numeric Hallucination
 
 Large Language Models (LLMs) are stochastic systems that may generate numbers that deviate from available data—a failure known as **numeric hallucination**. Existing safeguards like retrieval-augmented generation, citations, and uncertainty estimation improve transparency but cannot guarantee fidelity: fabricated or misquoted values may still be displayed as if correct.
@@ -85,12 +93,47 @@ PCN is designed for **numerically sensitive settings** where accuracy matters:
 - Legal and regulatory compliance
 - Educational content with quantitative claims
 
-## Learn More
+## Documentation
+
+Comprehensive documentation is available:
 
 - [Documentation](docs/) — Detailed guides and reference materials
-- [Policy Reference](docs/reference/policies.md) — Understanding PCN policies
+- [Policy Reference](docs/reference/policies.md) — Understanding PCN verification policies
 - [Contributing Guide](CONTRIBUTING.md) — How to contribute to PCN
+- [Code of Conduct](CODE_OF_CONDUCT.md) — Community guidelines
+
+> **Note**: For web-based documentation accessible to non-technical audiences, see the [documentation website](https://avsolatorio.github.io/pcn) (when available).
+
+## Contact
+
+For questions, issues, or contributions, please contact:
+
+<!-- - **World Bank GitHub**: [github@worldbank.org](mailto:github@worldbank.org) -->
+- **Project Maintainers**: [avsolatorio@gmail.com](mailto:avsolatorio@gmail.com)
+
+Alternatively, you can:
+- Open an issue on [GitHub Issues](https://github.com/avsolatorio/pcn/issues)
+- Start a discussion on [GitHub Discussions](https://github.com/avsolatorio/pcn/discussions)
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License together with the World Bank IGO Rider. The Rider is purely procedural: it reserves all privileges and immunities enjoyed by the World Bank, without adding restrictions to the MIT permissions. Please review both files before using, distributing or contributing.
+
+See [LICENSE](LICENSE) for the full license text.
+
+
+## Citation
+
+If you use PCN in your research, please cite it as:
+
+```bibtex
+@misc{solatorio2025proofcarryingnumberspcnprotocol,
+  title         = {Proof-Carrying Numbers (PCN): A Protocol for Trustworthy Numeric Answers from LLMs via Claim Verification},
+  author        = {Aivin V. Solatorio},
+  year          = {2025},
+  eprint        = {2509.06902},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2509.06902},
+  keywords      = {LLM, Numeric Hallucination, Verification, Proof-Carrying, Trust, AI Safety}
+}
