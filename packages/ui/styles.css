@@ -1,0 +1,19 @@
+/* Optional PCN claim verification marks. Import in your app: import "@pcn/ui/styles.css" */
+
+.pcn-claim .verified-mark {
+  color: #16a34a; /* green-600 */
+}
+
+:root.dark .pcn-claim .verified-mark,
+[data-theme="dark"] .pcn-claim .verified-mark {
+  color: #4ade80; /* green-400 */
+}
+
+.pcn-claim .verify-pending {
+  color: #d97706; /* amber-600 */
+}
+
+:root.dark .pcn-claim .verify-pending,
+[data-theme="dark"] .pcn-claim .verify-pending {
+  color: #fbbf24; /* amber-400 */
+}

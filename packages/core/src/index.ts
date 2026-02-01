@@ -7,3 +7,5 @@ export { escapeAttr, toTitleAttr } from "./escape";
 export { compareByPolicy } from "./compare";
 export { withMark } from "./render";
 export { pcnPolicy, processPCN, extractClaimsFromHtml, processPCNClaims } from "./process";
+export { policyFromAttrs, parseClaimSegments } from "./claim-segments";
+export type { ResponseSegment } from "./claim-segments";

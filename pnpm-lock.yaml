@@ -20,6 +20,9 @@ importers:
       '@pcn/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@pcn/data360':
+        specifier: workspace:*
+        version: link:../../packages/data360
       '@pcn/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -76,6 +79,27 @@ importers:
       vitest:
         specifier: ^2.0.0
         version: 2.1.9(@types/node@22.19.3)
+
+  packages/data360:
+    devDependencies:
+      '@pcn/core':
+        specifier: workspace:*
+        version: link:../core
+      '@pcn/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@types/react':
+        specifier: ^18.3.0
+        version: 18.3.27
+      react:
+        specifier: ^18.3.0
+        version: 18.3.1
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(postcss@8.5.6)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
 
   packages/fixtures:
     devDependencies:

@@ -45,6 +45,7 @@ This monorepo contains the **PCN ecosystem**:
 
 - **TypeScript packages** (`packages/*`) — Published to npm under `@pcn/*`
   - `@pcn/core` — Core PCN implementation
+  - `@pcn/data360` — Data360 preset: Data360ClaimsProvider + extractor for get_data (claim_id/OBS_VALUE/REF_AREA/TIME_PERIOD)
   - `@pcn/fixtures` — Shared test fixtures
   - `@pcn/ui` — React UI components for verified/pending claims
 
@@ -57,7 +58,7 @@ This monorepo contains the **PCN ecosystem**:
   - Shared test fixtures
 
 - **Examples** (`examples/*`) — Sample apps using PCN
-  - `chat-app` — Vite + React demo: ClaimsManager, ClaimsProvider, ClaimMark
+  - `chat-app` — Vite + React demo: Data360ClaimsProvider + ClaimMark (Data360 preset)
 
 - **Documentation** (`docs/*`) — Intended for GitBook sync
 

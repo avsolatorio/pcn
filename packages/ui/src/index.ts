@@ -8,3 +8,7 @@ export {
 export type { ClaimsProviderProps } from "./context";
 export { ClaimMark } from "./claim-mark";
 export type { ClaimMarkProps } from "./claim-mark";
+export { ClaimMarkStreamdown, streamdownClaimComponents } from "./claim-mark-streamdown";
+export type { ClaimNodeProps } from "./claim-mark-streamdown";
+export { IngestToolOutput } from "./ingest-tool-output";
+export type { IngestToolOutputProps } from "./ingest-tool-output";

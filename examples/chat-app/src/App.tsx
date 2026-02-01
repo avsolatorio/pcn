@@ -1,9 +1,8 @@
-import { useMemo, useEffect } from "react";
-import { ClaimsManager, createDataPointExtractor } from "@pcn/core";
-import { ClaimsProvider, useClaimsManager } from "@pcn/ui";
+import { Data360ClaimsProvider, DATA360_GET_DATA_TOOL } from "@pcn/data360";
+import { IngestToolOutput } from "@pcn/ui";
 import { MessageWithClaims } from "./MessageWithClaims";
 
-/** Simulated get_data tool result (e.g. from Data360). */
+/** Simulated Data360 get_data tool result. */
 const MOCK_GET_DATA_RESULT = {
   data: [
     {
@@ -22,17 +21,10 @@ const MOCK_GET_DATA_RESULT = {
 };
 
 function ChatContent() {
-  const manager = useClaimsManager();
-
-  useEffect(() => {
-    if (!manager) return;
-    manager.ingest("get_data", MOCK_GET_DATA_RESULT);
-  }, [manager]);
-
   return (
     <div className="chat">
       <header className="chat-header">
-        <h1>PCN Example</h1>
+        <h1>PCN Example (Data360 preset)</h1>
         <p>Numbers with ✓ are verified against tool data; ⚠ are pending.</p>
       </header>
       <div className="message-list">
@@ -43,24 +35,11 @@ function ChatContent() {
 }
 
 export function App() {
-  const manager = useMemo(() => {
-    const m = new ClaimsManager();
-    m.registerExtractor(
-      "get_data",
-      createDataPointExtractor({
-        dataKey: "data",
-        claimIdKey: "claim_id",
-        valueKey: "OBS_VALUE",
-        countryKey: "REF_AREA",
-        dateKey: "TIME_PERIOD",
-      })
-    );
-    return m;
-  }, []);
-
   return (
-    <ClaimsProvider manager={manager}>
-      <ChatContent />
-    </ClaimsProvider>
+    <Data360ClaimsProvider>
+      <IngestToolOutput toolName={DATA360_GET_DATA_TOOL} output={MOCK_GET_DATA_RESULT}>
+        <ChatContent />
+      </IngestToolOutput>
+    </Data360ClaimsProvider>
   );
 }

@@ -10,6 +10,8 @@ pnpm add @pcn/core @pcn/ui react
 
 ## Usage
 
+For **Data360** get_data (claim_id, OBS_VALUE, REF_AREA, TIME_PERIOD), use the preset: [@pcn/data360](../data360/README.md). It provides `Data360ClaimsProvider` and `DATA360_GET_DATA_TOOL`.
+
 ### 1. Claims manager + provider
 
 Create a `ClaimsManager`, register extractors for tools that return `claim_id`, and wrap your app (or chat) in `ClaimsProvider` so components can look up claims.
@@ -43,14 +45,21 @@ function App() {
 
 ### 2. Ingest tool results
 
-When a tool result arrives (e.g. from your chat API), call `manager.ingest(toolName, result)`. The manager runs the registered extractor and caches claims; the provider re-renders.
+When a tool result arrives, either use the **IngestToolOutput** component (works with any provider, including Data360’s `Data360ClaimsProvider`):
+
+```tsx
+<IngestToolOutput toolName="get_data" output={toolResult}>
+  <YourToolOutputUI output={toolResult} />
+</IngestToolOutput>
+```
+
+Or call `manager.ingest(toolName, result)` yourself:
 
 ```tsx
 function Chat() {
   const manager = useClaimsManager();
 
   useEffect(() => {
-    // When you receive a tool result:
     if (toolName === "get_data") manager?.ingest("get_data", toolResult);
   }, [toolName, toolResult, manager]);
 
@@ -71,6 +80,21 @@ import { ClaimMark } from "@pcn/ui";
 </ClaimMark>
 ```
 
+### 4. Streamdown / react-markdown (tables and markdown)
+
+If you use **Streamdown** or **react-markdown** with **rehype-raw**, pass the built-in claim component so raw HTML `<claim>` tags are rendered as `ClaimMark` and tables/layout stay intact:
+
+```tsx
+import { Streamdown } from "streamdown";
+import { streamdownClaimComponents } from "@pcn/ui";
+
+<Streamdown components={streamdownClaimComponents}>
+  {markdownContent}
+</Streamdown>
+```
+
+Or use the component directly: `components={{ claim: ClaimMarkStreamdown }}`. The model can emit markdown with `<claim id="..." policy="rounded" decimals="2">3439.1</claim>` inside table cells or paragraphs.
+
 ### Static claims (no manager)
 
 If you have a fixed map of claims (e.g. from server props), pass `initialClaims` and omit `manager`:
@@ -83,8 +107,13 @@ If you have a fixed map of claims (e.g. from server props), pass `initialClaims`
 
 ## API
 
+- **IngestToolOutput** – ingests a tool result into the manager when mounted; `toolName`, `output`, `children`
 - **ClaimsProvider** – `manager?: ClaimsManager`, `initialClaims?: Record<string, Claim>`, `children`
 - **useClaims()** – returns `Record<string, Claim>`
 - **useClaimsManager()** – returns `ClaimsManager | null`
 - **useClaim(id)** – returns `Claim | undefined`
 - **ClaimMark** – `id`, `policy`, `children` (the displayed text to verify)
+- **ClaimMarkStreamdown** – component for react-markdown/Streamdown `components.claim` (props: id, policy, decimals, tolerance, children from raw HTML)
+- **streamdownClaimComponents** – `{ claim: ClaimMarkStreamdown }` for `<Streamdown components={streamdownClaimComponents}>`
+
+Optional styles: `import "@pcn/ui/styles.css"` for `.pcn-claim`, `.verified-mark`, `.verify-pending`.
