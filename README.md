@@ -110,6 +110,7 @@ PCN is designed for **numerically sensitive settings** where accuracy matters:
 Comprehensive documentation is available:
 
 - [Documentation](docs/) — Detailed guides and reference materials
+- [Integrating PCN in your app](docs/integration.md) — Integration paths (Data360 vs custom), dependencies, and what your app must provide
 - [Publishing to npm](docs/publishing.md) — How to publish `@pcn/*` so apps can install from npm
 - [Policy Reference](docs/reference/policies.md) — Understanding PCN verification policies
 - [Contributing Guide](CONTRIBUTING.md) — How to contribute to PCN

@@ -69,7 +69,7 @@ function Chat() {
 
 ### 3. Render claims with ClaimMark
 
-Use `ClaimMark` where you render claim content (e.g. as a custom component for `<claim>` in your markdown renderer). It looks up the claim by id, runs the policy comparison, and renders the content plus ✓ or ⚠.
+Use `ClaimMark` where you render claim content (e.g. as a custom component for `<claim>` in your markdown renderer). It looks up the claim by id, runs the policy comparison, and renders the content plus ✓ or ⚠. Hovering (or focusing) the mark shows a tooltip with claim details (country, date, source value, display rule).
 
 ```tsx
 import { ClaimMark } from "@pcn-js/ui";
@@ -79,6 +79,8 @@ import { ClaimMark } from "@pcn-js/ui";
   42
 </ClaimMark>
 ```
+
+**Tooltip behavior:** By default the tooltip stays open briefly (150 ms) after the pointer leaves the mark, so you can move the cursor onto the tooltip to read or copy. Set `tooltipHideDelayMs={0}` for immediate hide (original behavior), or a custom value (e.g. `300`) for a longer delay.
 
 ### 4. Streamdown / react-markdown (tables and markdown)
 
@@ -112,7 +114,7 @@ If you have a fixed map of claims (e.g. from server props), pass `initialClaims`
 - **useClaims()** – returns `Record<string, Claim>`
 - **useClaimsManager()** – returns `ClaimsManager | null`
 - **useClaim(id)** – returns `Claim | undefined`
-- **ClaimMark** – `id`, `policy`, `children` (the displayed text to verify)
+- **ClaimMark** – `id`, `policy`, `children` (the displayed text to verify), optional `tooltipHideDelayMs?: number` (ms before hiding tooltip on leave; default 150; use 0 for immediate hide)
 - **ClaimMarkStreamdown** – component for react-markdown/Streamdown `components.claim` (props: id, policy, decimals, tolerance, children from raw HTML)
 - **streamdownClaimComponents** – `{ claim: ClaimMarkStreamdown }` for `<Streamdown components={streamdownClaimComponents}>`
 

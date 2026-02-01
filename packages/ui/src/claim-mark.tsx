@@ -5,8 +5,8 @@ import type { Claim, Policy } from "@pcn-js/core";
 import { useClaim } from "./context";
 
 const GAP = 8;
-/** Delay (ms) before hiding tooltip when leaving trigger, so user can move to tooltip. */
-const HIDE_DELAY_MS = 150;
+/** Default delay (ms) before hiding tooltip when leaving trigger/tooltip. */
+const DEFAULT_TOOLTIP_HIDE_DELAY_MS = 150;
 
 function useTooltipPosition(triggerRef: RefObject<HTMLElement | null>, open: boolean) {
   const [position, setPosition] = useState<{ bottom: number; left: number } | null>(null);
@@ -43,6 +43,12 @@ export type ClaimMarkProps = {
   policy: Policy;
   /** Inner text displayed in the claim (the number or phrase to verify). */
   children: ReactNode;
+  /**
+   * Optional. Milliseconds to wait before hiding the tooltip when the pointer
+   * leaves the trigger or the tooltip. Default 150. Set to 0 for immediate hide
+   * (original behavior: tooltip disappears as soon as the pointer leaves).
+   */
+  tooltipHideDelayMs?: number;
 };
 
 function formatDate(d: string | Date): string {
@@ -141,7 +147,12 @@ function buildTitle(claim: Claim | undefined, policy: Policy): string {
  * displayed content matches the registered claim under the given policy.
  * Use inside ClaimsProvider; looks up claim by id from context.
  */
-export function ClaimMark({ id, policy, children }: ClaimMarkProps) {
+export function ClaimMark({
+  id,
+  policy,
+  children,
+  tooltipHideDelayMs = DEFAULT_TOOLTIP_HIDE_DELAY_MS,
+}: ClaimMarkProps) {
   const detailId = useId();
   const triggerRef = useRef<HTMLSpanElement>(null);
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -157,7 +168,14 @@ export function ClaimMark({ id, policy, children }: ClaimMarkProps) {
 
   const scheduleHide = () => {
     clearHideTimeout();
-    hideTimeoutRef.current = setTimeout(() => setTooltipOpen(false), HIDE_DELAY_MS);
+    if (tooltipHideDelayMs <= 0) {
+      setTooltipOpen(false);
+    } else {
+      hideTimeoutRef.current = setTimeout(
+        () => setTooltipOpen(false),
+        tooltipHideDelayMs,
+      );
+    }
   };
 
   const openTooltip = () => {
