@@ -56,6 +56,9 @@ This monorepo contains the **PCN ecosystem**:
   - Policy schema definitions
   - Shared test fixtures
 
+- **Examples** (`examples/*`) — Sample apps using PCN
+  - `chat-app` — Vite + React demo: ClaimsManager, ClaimsProvider, ClaimMark
+
 - **Documentation** (`docs/*`) — Intended for GitBook sync
 
 ## Quick Start
@@ -71,6 +74,10 @@ pnpm install
 
 # Run tests
 pnpm -r test
+
+# Run the example app (after install)
+pnpm --filter pcn-example-chat-app dev
+# Then open http://localhost:5173
 
 # Build all packages
 pnpm -r build
