@@ -1,4 +1,4 @@
-# @pcn/core
+# @pcn-js/core
 
 Core PCN implementation: verification engine, claims manager, and HTML processing.
 
@@ -7,7 +7,7 @@ Core PCN implementation: verification engine, claims manager, and HTML processin
 Central cache and lookup for claims. Register claims by id (e.g. from tool results that include `claim_id`), then use `get`/`getAll` when processing content or with `@pcn/ui` components.
 
 ```ts
-import { ClaimsManager, createDataPointExtractor } from "@pcn/core";
+import { ClaimsManager, createDataPointExtractor } from "@pcn-js/core";
 
 const manager = new ClaimsManager();
 

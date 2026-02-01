@@ -1,4 +1,4 @@
-import { ClaimMark } from "@pcn/ui";
+import { ClaimMark } from "@pcn-js/ui";
 
 /**
  * Renders a simple "assistant" message that contains numeric claims.

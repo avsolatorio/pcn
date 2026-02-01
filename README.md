@@ -43,11 +43,11 @@ PCN enforces numeric fidelity by placing verification in the **renderer**, not t
 
 This monorepo contains the **PCN ecosystem**:
 
-- **TypeScript packages** (`packages/*`) — Published to npm under `@pcn/*`
-  - `@pcn/core` — Core PCN implementation
-  - `@pcn/data360` — Data360 preset: Data360ClaimsProvider + extractor for get_data (claim_id/OBS_VALUE/REF_AREA/TIME_PERIOD)
-  - `@pcn/fixtures` — Shared test fixtures
-  - `@pcn/ui` — React UI components for verified/pending claims
+- **TypeScript packages** (`packages/*`) — Published to npm under `@pcn-js/*`
+  - `@pcn-js/core` — Core PCN implementation
+  - `@pcn-js/data360` — Data360 preset: Data360ClaimsProvider + extractor for get_data (claim_id/OBS_VALUE/REF_AREA/TIME_PERIOD)
+  - `@pcn-js/fixtures` — Shared test fixtures
+  - `@pcn-js/ui` — React UI components for verified/pending claims
 
 - **Python packages** (`python/*`) — Published to PyPI under `pcn-*`
   - `pcn-core` — Core PCN implementation for Python
@@ -110,6 +110,7 @@ PCN is designed for **numerically sensitive settings** where accuracy matters:
 Comprehensive documentation is available:
 
 - [Documentation](docs/) — Detailed guides and reference materials
+- [Publishing to npm](docs/publishing.md) — How to publish `@pcn/*` so apps can install from npm
 - [Policy Reference](docs/reference/policies.md) — Understanding PCN verification policies
 - [Contributing Guide](CONTRIBUTING.md) — How to contribute to PCN
 - [Code of Conduct](CODE_OF_CONDUCT.md) — Community guidelines

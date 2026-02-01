@@ -1,6 +1,6 @@
 {
-  "name": "@pcn/core",
-  "version": "0.1.0",
+  "name": "@pcn-js/core",
+  "version": "0.1.1",
   "description": "Proof-Carrying Numbers (PCN): core engine for verifying numeric claims and annotating HTML <claim> tags.",
   "license": "Apache-2.0",
   "type": "module",
@@ -19,6 +19,9 @@
     "README.md",
     "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "dependencies": {
     "cheerio": "^1.1.2",

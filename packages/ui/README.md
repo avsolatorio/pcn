@@ -1,11 +1,11 @@
-# @pcn/ui
+# @pcn-js/ui
 
 React components and claims context for rendering PCN verified/pending claims in the UI.
 
 ## Install
 
 ```bash
-pnpm add @pcn/core @pcn/ui react
+pnpm add @pcn-js/core @pcn-js/ui react
 ```
 
 ## Usage
@@ -17,8 +17,8 @@ For **Data360** get_data (claim_id, OBS_VALUE, REF_AREA, TIME_PERIOD), use the p
 Create a `ClaimsManager`, register extractors for tools that return `claim_id`, and wrap your app (or chat) in `ClaimsProvider` so components can look up claims.
 
 ```tsx
-import { ClaimsManager, createDataPointExtractor } from "@pcn/core";
-import { ClaimsProvider, ClaimMark, useClaimsManager } from "@pcn/ui";
+import { ClaimsManager, createDataPointExtractor } from "@pcn-js/core";
+import { ClaimsProvider, ClaimMark, useClaimsManager } from "@pcn-js/ui";
 
 const manager = new ClaimsManager();
 
@@ -72,7 +72,7 @@ function Chat() {
 Use `ClaimMark` where you render claim content (e.g. as a custom component for `<claim>` in your markdown renderer). It looks up the claim by id, runs the policy comparison, and renders the content plus ✓ or ⚠.
 
 ```tsx
-import { ClaimMark } from "@pcn/ui";
+import { ClaimMark } from "@pcn-js/ui";
 
 // In your markdown components or stream renderer:
 <ClaimMark id={claimId} policy={{ type: "rounded", decimals: 0 }}>
@@ -86,7 +86,7 @@ If you use **Streamdown** or **react-markdown** with **rehype-raw**, pass the bu
 
 ```tsx
 import { Streamdown } from "streamdown";
-import { streamdownClaimComponents } from "@pcn/ui";
+import { streamdownClaimComponents } from "@pcn-js/ui";
 
 <Streamdown components={streamdownClaimComponents}>
   {markdownContent}
@@ -116,4 +116,4 @@ If you have a fixed map of claims (e.g. from server props), pass `initialClaims`
 - **ClaimMarkStreamdown** – component for react-markdown/Streamdown `components.claim` (props: id, policy, decimals, tolerance, children from raw HTML)
 - **streamdownClaimComponents** – `{ claim: ClaimMarkStreamdown }` for `<Streamdown components={streamdownClaimComponents}>`
 
-Optional styles: `import "@pcn/ui/styles.css"` for `.pcn-claim`, `.verified-mark`, `.verify-pending`.
+Optional styles: `import "@pcn-js/ui/styles.css"` for `.pcn-claim`, `.verified-mark`, `.verify-pending`.

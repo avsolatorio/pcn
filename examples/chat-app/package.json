@@ -1,6 +1,6 @@
 {
   "name": "pcn-example-chat-app",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,9 +10,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@pcn/core": "workspace:*",
-    "@pcn/data360": "workspace:*",
-    "@pcn/ui": "workspace:*",
+    "@pcn-js/core": "workspace:*",
+    "@pcn-js/data360": "workspace:*",
+    "@pcn-js/ui": "workspace:*",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"
   },

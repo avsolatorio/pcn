@@ -6,8 +6,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Claim } from "@pcn/core";
-import { ClaimsManager } from "@pcn/core";
+import type { Claim } from "@pcn-js/core";
+import { ClaimsManager } from "@pcn-js/core";
 
 type ClaimsContextValue = {
   claims: Record<string, Claim>;

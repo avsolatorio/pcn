@@ -17,13 +17,13 @@ importers:
 
   examples/chat-app:
     dependencies:
-      '@pcn/core':
+      '@pcn-js/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@pcn/data360':
+      '@pcn-js/data360':
         specifier: workspace:*
         version: link:../../packages/data360
-      '@pcn/ui':
+      '@pcn-js/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       react:
@@ -82,10 +82,10 @@ importers:
 
   packages/data360:
     devDependencies:
-      '@pcn/core':
+      '@pcn-js/core':
         specifier: workspace:*
         version: link:../core
-      '@pcn/ui':
+      '@pcn-js/ui':
         specifier: workspace:*
         version: link:../ui
       '@types/react':
@@ -112,7 +112,7 @@ importers:
 
   packages/ui:
     dependencies:
-      '@pcn/core':
+      '@pcn-js/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

@@ -1,6 +1,6 @@
 "use client";
 
-import { useClaimsManager } from "@pcn/ui";
+import { useClaimsManager } from "@pcn-js/ui";
 import { useEffect } from "react";
 import { DATA360_GET_DATA_TOOL } from "./data360-claims-provider";
 

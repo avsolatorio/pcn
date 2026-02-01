@@ -1,4 +1,4 @@
-/* Optional PCN claim verification marks. Import in your app: import "@pcn/ui/styles.css" */
+/* Optional PCN claim verification marks. Import in your app: import "@pcn-js/ui/styles.css" */
 
 .pcn-claim .verified-mark {
   color: #16a34a; /* green-600 */

@@ -1,4 +1,4 @@
-export type { Claim, Policy } from "@pcn/core";
+export type { Claim, Policy } from "@pcn-js/core";
 export {
   ClaimsProvider,
   useClaims,

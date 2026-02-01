@@ -5,8 +5,8 @@ import {
   ClaimsManager,
   createDataPointExtractor,
   type DataPointExtractorOptions,
-} from "@pcn/core";
-import { ClaimsProvider } from "@pcn/ui";
+} from "@pcn-js/core";
+import { ClaimsProvider } from "@pcn-js/ui";
 
 /** Default tool name for Data360 get_data (use with IngestToolOutput). */
 export const DATA360_GET_DATA_TOOL = "data360_get_data";
@@ -29,12 +29,12 @@ export type Data360ClaimsProviderProps = {
 
 /**
  * ClaimsProvider preconfigured with a ClaimsManager and a Data360 get_data
- * data-point extractor. Use with IngestToolOutput (from @pcn/ui) when rendering
+ * data-point extractor. Use with IngestToolOutput (from @pcn-js/ui) when rendering
  * data360_get_data results so ClaimMark can resolve claims by claim_id.
  *
  * @example
- * import { Data360ClaimsProvider, DATA360_GET_DATA_TOOL } from "@pcn/data360";
- * import { IngestToolOutput } from "@pcn/ui";
+ * import { Data360ClaimsProvider, DATA360_GET_DATA_TOOL } from "@pcn-js/data360";
+ * import { IngestToolOutput } from "@pcn-js/ui";
  *
  * <Data360ClaimsProvider>
  *   <App />

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { policyFromAttrs } from "@pcn/core";
+import { policyFromAttrs } from "@pcn-js/core";
 import { ClaimMark } from "./claim-mark";
 
 /** Props passed by react-markdown/rehype for raw HTML <claim> element */

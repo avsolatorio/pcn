@@ -1,5 +1,5 @@
-import { Data360ClaimsProvider, DATA360_GET_DATA_TOOL } from "@pcn/data360";
-import { IngestToolOutput } from "@pcn/ui";
+import { Data360ClaimsProvider, DATA360_GET_DATA_TOOL } from "@pcn-js/data360";
+import { IngestToolOutput } from "@pcn-js/ui";
 import { MessageWithClaims } from "./MessageWithClaims";
 
 /** Simulated Data360 get_data tool result. */

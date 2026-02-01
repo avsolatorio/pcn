@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { compareByPolicy } from "@pcn/core";
-import type { Claim, Policy } from "@pcn/core";
+import { compareByPolicy } from "@pcn-js/core";
+import type { Claim, Policy } from "@pcn-js/core";
 import { useClaim } from "./context";
 
 export type ClaimMarkProps = {
