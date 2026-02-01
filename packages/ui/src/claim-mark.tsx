@@ -1,7 +1,40 @@
-import type { ReactNode } from "react";
+import { useId, useLayoutEffect, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import { createPortal } from "react-dom";
 import { compareByPolicy } from "@pcn-js/core";
 import type { Claim, Policy } from "@pcn-js/core";
 import { useClaim } from "./context";
+
+const GAP = 8;
+/** Delay (ms) before hiding tooltip when leaving trigger, so user can move to tooltip. */
+const HIDE_DELAY_MS = 150;
+
+function useTooltipPosition(triggerRef: RefObject<HTMLElement | null>, open: boolean) {
+  const [position, setPosition] = useState<{ bottom: number; left: number } | null>(null);
+
+  useLayoutEffect(() => {
+    if (!open || typeof document === "undefined") return;
+    const el = triggerRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      setPosition({
+        bottom: window.innerHeight - rect.top + GAP,
+        left: Math.max(GAP, Math.min(rect.left, window.innerWidth - 280 - GAP)),
+      });
+    };
+
+    update();
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [open, triggerRef]);
+
+  return position;
+}
 
 export type ClaimMarkProps = {
   /** Claim id (must match id used when registering the claim). */
@@ -16,15 +49,91 @@ function formatDate(d: string | Date): string {
   return d instanceof Date ? d.toISOString().slice(0, 10) : String(d);
 }
 
+/** Match a string that looks like scientific notation (e.g. "1.42863e+009"). */
+const SCIENTIFIC_STRING = /^[-+]?\d*\.?\d+e[+-]?\d+$/i;
+
+function formatNumberNoScientific(value: number): string {
+  const s = String(value);
+  if (!s.includes("e") && !s.includes("E")) return s;
+  if (value === 0 || !Number.isFinite(value)) return s;
+  const sign = value < 0 ? "-" : "";
+  const abs = Math.abs(value);
+  if (abs < 1e-6) {
+    return sign + abs.toFixed(20).replace(/\.?0+$/, "");
+  }
+  if (abs >= 1e21) {
+    const fixed = abs.toFixed(0);
+    if (!fixed.includes("e") && !fixed.includes("E")) return sign + fixed;
+    const match = String(abs).toLowerCase().match(/e\+?(-?\d+)$/);
+    const exp = match ? Number.parseInt(match[1], 10) : 0;
+    const mantissa = abs / 10 ** exp;
+    const mStr = mantissa.toFixed(15).replace(/\.?0+$/, "");
+    const [whole, frac = ""] = mStr.split(".");
+    const pad = exp - whole.length - frac.length + 1;
+    return sign + whole + frac + (pad > 0 ? "0".repeat(pad) : "");
+  }
+  return sign + abs.toFixed(20).replace(/\.?0+$/, "");
+}
+
+/**
+ * Format a claim value for display exactly as it appears: no scientific
+ * notation, no locale formatting, no rounding. Strings are shown as-is
+ * unless they are scientific notation (e.g. "1.42863e+009"), which we
+ * expand to plain digits.
+ */
+function formatSourceValue(value: unknown): string {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (SCIENTIFIC_STRING.test(trimmed)) {
+      const num = Number(trimmed);
+      if (Number.isFinite(num)) return formatNumberNoScientific(num);
+    }
+    return value;
+  }
+  if (typeof value === "number") return formatNumberNoScientific(value);
+  return String(value);
+}
+
+function formatPolicyDescription(policy: Policy): string {
+  switch (policy.type) {
+    case "exact":
+      return "Exact match";
+    case "rounded":
+      return policy.decimals === 0
+        ? "Rounded to whole number"
+        : `Rounded to ${policy.decimals} decimal place${policy.decimals === 1 ? "" : "s"}`;
+    case "tolerance":
+      return `Within ±${policy.tolerance}`;
+    case "percent":
+      return "Percentage match";
+    case "range":
+      return "Within range";
+    case "abbr":
+      return "Abbreviation match";
+    case "ratio":
+      return "Ratio match";
+    case "year":
+      return "Year match";
+    case "auto":
+    default:
+      return "Automatic match";
+  }
+}
+
+function buildDetailLines(claim: Claim | undefined, policy: Policy): string[] {
+  if (!claim) return [];
+  const lines: string[] = [];
+  if (claim.country) lines.push(`Country: ${claim.country}`);
+  if (claim.date != null) lines.push(`Date: ${formatDate(claim.date)}`);
+  if (claim.value != null) lines.push(`Source value: ${formatSourceValue(claim.value)}`);
+  lines.push(`Display rule: ${formatPolicyDescription(policy)}`);
+  return lines;
+}
+
 function buildTitle(claim: Claim | undefined, policy: Policy): string {
   if (!claim) return "Needs verification";
-  const parts = [
-    claim.country ? `Country: ${claim.country}` : "",
-    claim.date != null ? `Date: ${formatDate(claim.date)}` : "",
-    claim.value != null ? `Actual: ${claim.value}` : "",
-    `Policy: ${JSON.stringify(policy)}`,
-  ].filter(Boolean);
-  return parts.join("\n");
+  return buildDetailLines(claim, policy).join("\n");
 }
 
 /**
@@ -33,31 +142,103 @@ function buildTitle(claim: Claim | undefined, policy: Policy): string {
  * Use inside ClaimsProvider; looks up claim by id from context.
  */
 export function ClaimMark({ id, policy, children }: ClaimMarkProps) {
+  const detailId = useId();
+  const triggerRef = useRef<HTMLSpanElement>(null);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const position = useTooltipPosition(triggerRef, tooltipOpen);
+
+  const clearHideTimeout = () => {
+    if (hideTimeoutRef.current != null) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
+    }
+  };
+
+  const scheduleHide = () => {
+    clearHideTimeout();
+    hideTimeoutRef.current = setTimeout(() => setTooltipOpen(false), HIDE_DELAY_MS);
+  };
+
+  const openTooltip = () => {
+    clearHideTimeout();
+    if (detailLines.length > 0) setTooltipOpen(true);
+  };
+
+  useEffect(() => () => clearHideTimeout(), []);
+
   const claim = useClaim(id);
   const innerText = typeof children === "string" ? children : String(children ?? "");
   const ok = claim ? compareByPolicy(innerText, claim, policy) : false;
-  const title = buildTitle(claim, policy);
+  const detailLines = buildDetailLines(claim ?? undefined, policy);
+  const title = detailLines.length > 0 ? detailLines.join("\n") : "Needs verification";
 
   const markTitle = ok ? `Verified data\n\n${title}` : `Needs verification\n\n${title}`;
   const showPendingValue = !ok && claim?.value != null;
 
-  return (
-    <span data-pcn-claim-id={id} className="pcn-claim" id={id}>
-      {children}
-      <sup
-        className={ok ? "verified-mark" : "verify-pending"}
-        title={markTitle}
-        role="img"
-        aria-label={ok ? "Verified" : "Needs verification"}
+  const tooltipContent =
+    tooltipOpen && detailLines.length > 0 && position != null && typeof document !== "undefined" ? (
+      <span
+        id={detailId}
+        className="pcn-claim-detail pcn-claim-detail-portal"
+        role="tooltip"
+        style={{
+          position: "fixed",
+          bottom: `${position.bottom}px`,
+          left: `${position.left}px`,
+        }}
+        onMouseEnter={openTooltip}
+        onMouseLeave={scheduleHide}
       >
-        {ok ? "✓" : "⚠"}
-      </sup>
-      {showPendingValue && (
-        <span className="pcn-pending-value" title={title} aria-hidden="true">
-          {" "}
-          (Actual: {String(claim.value)})
+        <span className="pcn-claim-detail-status">
+          {ok ? "Verified data" : "Needs verification"}
         </span>
-      )}
-    </span>
+        <dl className="pcn-claim-detail-list">
+          {detailLines.map((line) => {
+            const colon = line.indexOf(": ");
+            const label = colon >= 0 ? line.slice(0, colon) : "";
+            const value = colon >= 0 ? line.slice(colon + 2) : line;
+            return (
+              <div key={line} className="pcn-claim-detail-row">
+                <dt className="pcn-claim-detail-label">{label}</dt>
+                <dd className="pcn-claim-detail-value">{value}</dd>
+              </div>
+            );
+          })}
+        </dl>
+      </span>
+    ) : null;
+
+  return (
+    <>
+      <span
+        ref={triggerRef}
+        data-pcn-claim-id={id}
+        className="pcn-claim"
+        id={id}
+        onMouseEnter={openTooltip}
+        onMouseLeave={scheduleHide}
+        onFocus={() => detailLines.length > 0 && setTooltipOpen(true)}
+        onBlur={() => setTooltipOpen(false)}
+      >
+        {children}
+        <sup
+          className={ok ? "verified-mark" : "verify-pending"}
+          title={markTitle}
+          role="img"
+          aria-label={ok ? "Verified" : "Needs verification"}
+          aria-describedby={detailLines.length > 0 ? detailId : undefined}
+        >
+          {ok ? "✓" : "⚠"}
+        </sup>
+        {showPendingValue && (
+          <span className="pcn-pending-value" title={title} aria-hidden="true">
+            {" "}
+            (Actual: {formatSourceValue(claim.value)})
+          </span>
+        )}
+      </span>
+      {tooltipContent != null && createPortal(tooltipContent, document.body)}
+    </>
   );
 }

@@ -1,5 +1,9 @@
 /* Optional PCN claim verification marks. Import in your app: import "@pcn-js/ui/styles.css" */
 
+.pcn-claim {
+  position: relative;
+}
+
 .pcn-claim .verified-mark {
   color: #16a34a; /* green-600 */
 }
@@ -27,4 +31,84 @@
 :root.dark .pcn-claim .pcn-pending-value,
 [data-theme="dark"] .pcn-claim .pcn-pending-value {
   color: #9ca3af; /* gray-400 */
+}
+
+/* Tooltip with claim details (rendered in portal, position: fixed) */
+.pcn-claim-detail {
+  z-index: 9999;
+  max-width: 280px;
+  padding: 8px 10px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #1f2937;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pcn-claim-detail.pcn-claim-detail-portal {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto; /* allow moving mouse onto tooltip without it disappearing */
+}
+
+.pcn-claim-detail-status {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+.pcn-claim-detail-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pcn-claim-detail-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pcn-claim-detail-row:first-of-type {
+  margin-top: 0;
+}
+
+.pcn-claim-detail-label {
+  margin: 0;
+  flex-shrink: 0;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.pcn-claim-detail-value {
+  margin: 0;
+  min-width: 0;
+  word-break: break-word;
+  color: #1f2937;
+}
+
+:root.dark .pcn-claim-detail,
+[data-theme="dark"] .pcn-claim-detail {
+  color: #f3f4f6;
+  background: #374151;
+  border-color: #4b5563;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+:root.dark .pcn-claim-detail-status,
+[data-theme="dark"] .pcn-claim-detail-status {
+  color: #e5e7eb;
+}
+
+:root.dark .pcn-claim-detail-label,
+[data-theme="dark"] .pcn-claim-detail-label {
+  color: #9ca3af;
+}
+
+:root.dark .pcn-claim-detail-value,
+[data-theme="dark"] .pcn-claim-detail-value {
+  color: #f3f4f6;
 }
