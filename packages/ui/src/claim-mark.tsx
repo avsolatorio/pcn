@@ -39,6 +39,7 @@ export function ClaimMark({ id, policy, children }: ClaimMarkProps) {
   const title = buildTitle(claim, policy);
 
   const markTitle = ok ? `Verified data\n\n${title}` : `Needs verification\n\n${title}`;
+  const showPendingValue = !ok && claim?.value != null;
 
   return (
     <span data-pcn-claim-id={id} className="pcn-claim" id={id}>
@@ -51,6 +52,12 @@ export function ClaimMark({ id, policy, children }: ClaimMarkProps) {
       >
         {ok ? "✓" : "⚠"}
       </sup>
+      {showPendingValue && (
+        <span className="pcn-pending-value" title={title} aria-hidden="true">
+          {" "}
+          (Actual: {String(claim.value)})
+        </span>
+      )}
     </span>
   );
 }

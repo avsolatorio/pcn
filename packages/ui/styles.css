@@ -17,3 +17,14 @@
 [data-theme="dark"] .pcn-claim .verify-pending {
   color: #fbbf24; /* amber-400 */
 }
+
+/* Shown when pending and claim value is available */
+.pcn-claim .pcn-pending-value {
+  font-size: 0.85em;
+  color: #6b7280; /* gray-500 */
+}
+
+:root.dark .pcn-claim .pcn-pending-value,
+[data-theme="dark"] .pcn-claim .pcn-pending-value {
+  color: #9ca3af; /* gray-400 */
+}
