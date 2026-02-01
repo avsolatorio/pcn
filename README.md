@@ -26,9 +26,13 @@ PCN enforces numeric fidelity by placing verification in the **renderer**, not t
 ## Key Features
 
 ✅ **Model-agnostic**: Works with any LLM or text generation system
+
 ✅ **Lightweight**: Minimal overhead, integrates seamlessly into existing applications
+
 ✅ **Formally verified**: Proven soundness, completeness, fail-closed behavior, and monotonicity
+
 ✅ **Extensible**: Can be extended with cryptographic commitments
+
 ✅ **Policy-flexible**: Supports various verification policies (exact match, rounding, tolerance, aliases)
 
 ## Core Principle
@@ -42,7 +46,7 @@ This monorepo contains the **PCN ecosystem**:
 - **TypeScript packages** (`packages/*`) — Published to npm under `@pcn/*`
   - `@pcn/core` — Core PCN implementation
   - `@pcn/fixtures` — Shared test fixtures
-  - `@pcn/html` — HTML rendering utilities
+  - `@pcn/ui` — React UI components for verified/pending claims
 
 - **Python packages** (`python/*`) — Published to PyPI under `pcn-*`
   - `pcn-core` — Core PCN implementation for Python
