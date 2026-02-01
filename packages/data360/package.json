@@ -1,6 +1,6 @@
 {
   "name": "@pcn-js/data360",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "PCN preset for Data360 get_data: ClaimsProvider + extractor for claim_id/OBS_VALUE/REF_AREA/TIME_PERIOD.",
   "license": "Apache-2.0",
   "type": "module",
@@ -24,8 +24,8 @@
   },
   "sideEffects": false,
   "peerDependencies": {
-    "@pcn-js/core": ">=0.1.1",
-    "@pcn-js/ui": ">=0.1.1",
+    "@pcn-js/core": ">=0.1.2",
+    "@pcn-js/ui": ">=0.1.2",
     "react": ">=18.0.0"
   },
   "devDependencies": {

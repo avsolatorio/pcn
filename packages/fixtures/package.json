@@ -1,6 +1,6 @@
 {
   "name": "@pcn-js/fixtures",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Proof-Carrying Numbers (PCN): shared fixtures and test vectors.",
   "license": "Apache-2.0",
   "type": "module",

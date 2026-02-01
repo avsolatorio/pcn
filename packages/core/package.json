@@ -1,6 +1,6 @@
 {
   "name": "@pcn-js/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Proof-Carrying Numbers (PCN): core engine for verifying numeric claims and annotating HTML <claim> tags.",
   "license": "Apache-2.0",
   "type": "module",

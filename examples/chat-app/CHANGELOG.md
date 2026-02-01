@@ -1,5 +1,14 @@
 # pcn-example-chat-app
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @pcn-js/core@0.1.2
+  - @pcn-js/data360@0.1.2
+  - @pcn-js/ui@0.1.2
+
 ## 0.0.2
 
 ### Patch Changes
