@@ -127,6 +127,17 @@ function formatPolicyDescription(policy: Policy): string {
   }
 }
 
+type VerificationStatus = "verified" | "claim_not_found" | "policy_failed";
+
+function getVerificationStatus(
+  claim: Claim | undefined,
+  ok: boolean,
+): VerificationStatus {
+  if (ok) return "verified";
+  if (!claim) return "claim_not_found";
+  return "policy_failed";
+}
+
 function buildDetailLines(claim: Claim | undefined, policy: Policy): string[] {
   if (!claim) return [];
   const lines: string[] = [];
@@ -141,6 +152,23 @@ function buildTitle(claim: Claim | undefined, policy: Policy): string {
   if (!claim) return "Needs verification";
   return buildDetailLines(claim, policy).join("\n");
 }
+
+const UNVERIFIED_MESSAGES = {
+  claim_not_found: {
+    heading: "Claim not found",
+    explanation:
+      "No source data was registered for this claim. The value may not have been fetched yet, the claim ID may be wrong, or the data pipeline may not have run.",
+    suggestion: "Check that the claim ID is correct and that source data is being registered for this claim.",
+    ariaLabel: "Claim not found; no source data for this claim",
+  },
+  policy_failed: {
+    heading: "Value doesn't match source",
+    explanation:
+      "The shown value does not match the source data under the display rule. Common causes: rounding, units, or formatting differences.",
+    suggestion: "Check rounding and formatting, or adjust the display rule to match how the value is derived.",
+    ariaLabel: "Verification failed; displayed value does not match source data",
+  },
+} as const;
 
 /**
  * Renders a claim with a verification mark (✓ or ⚠) based on whether the
@@ -178,52 +206,102 @@ export function ClaimMark({
     }
   };
 
-  const openTooltip = () => {
-    clearHideTimeout();
-    if (detailLines.length > 0) setTooltipOpen(true);
-  };
 
   useEffect(() => () => clearHideTimeout(), []);
 
   const claim = useClaim(id);
   const innerText = typeof children === "string" ? children : String(children ?? "");
   const ok = claim ? compareByPolicy(innerText, claim, policy) : false;
+  const status = getVerificationStatus(claim, ok);
   const detailLines = buildDetailLines(claim ?? undefined, policy);
-  const title = detailLines.length > 0 ? detailLines.join("\n") : "Needs verification";
 
-  const markTitle = ok ? `Verified data\n\n${title}` : `Needs verification\n\n${title}`;
-  const showPendingValue = !ok && claim?.value != null;
+  const hasTooltipContent = ok ? detailLines.length > 0 : true;
+  const openTooltipIfContent = () => {
+    clearHideTimeout();
+    if (hasTooltipContent) setTooltipOpen(true);
+  };
+
+  const markTitle = ok
+    ? `Verified data\n\n${detailLines.join("\n")}`
+    : status === "claim_not_found"
+      ? `Claim not found\n\n${UNVERIFIED_MESSAGES.claim_not_found.explanation}\n\n${UNVERIFIED_MESSAGES.claim_not_found.suggestion}\n\nClaim ID: ${id}`
+      : `Value doesn't match source\n\nDisplayed: ${innerText}\nSource value: ${claim ? formatSourceValue(claim.value) : "—"}\nDisplay rule: ${formatPolicyDescription(policy)}\n\n${UNVERIFIED_MESSAGES.policy_failed.explanation}\n\n${UNVERIFIED_MESSAGES.policy_failed.suggestion}`;
+
+  const ariaLabel =
+    ok ? "Verified" : status === "claim_not_found" ? UNVERIFIED_MESSAGES.claim_not_found.ariaLabel : UNVERIFIED_MESSAGES.policy_failed.ariaLabel;
 
   const tooltipContent =
-    tooltipOpen && detailLines.length > 0 && position != null && typeof document !== "undefined" ? (
+    tooltipOpen && hasTooltipContent && position != null && typeof document !== "undefined" ? (
       <span
         id={detailId}
-        className="pcn-claim-detail pcn-claim-detail-portal"
+        className={`pcn-claim-detail pcn-claim-detail-portal pcn-claim-detail--${status}`}
         role="tooltip"
         style={{
           position: "fixed",
           bottom: `${position.bottom}px`,
           left: `${position.left}px`,
         }}
-        onMouseEnter={openTooltip}
+        onMouseEnter={openTooltipIfContent}
         onMouseLeave={scheduleHide}
       >
         <span className="pcn-claim-detail-status">
-          {ok ? "Verified data" : "Needs verification"}
+          {ok ? "Verified data" : status === "claim_not_found" ? UNVERIFIED_MESSAGES.claim_not_found.heading : UNVERIFIED_MESSAGES.policy_failed.heading}
         </span>
-        <dl className="pcn-claim-detail-list">
-          {detailLines.map((line) => {
-            const colon = line.indexOf(": ");
-            const label = colon >= 0 ? line.slice(0, colon) : "";
-            const value = colon >= 0 ? line.slice(colon + 2) : line;
-            return (
-              <div key={line} className="pcn-claim-detail-row">
-                <dt className="pcn-claim-detail-label">{label}</dt>
-                <dd className="pcn-claim-detail-value">{value}</dd>
+        {ok ? (
+          <dl className="pcn-claim-detail-list">
+            {detailLines.map((line) => {
+              const colon = line.indexOf(": ");
+              const label = colon >= 0 ? line.slice(0, colon) : "";
+              const value = colon >= 0 ? line.slice(colon + 2) : line;
+              return (
+                <div key={line} className="pcn-claim-detail-row">
+                  <dt className="pcn-claim-detail-label">{label}</dt>
+                  <dd className="pcn-claim-detail-value">{value}</dd>
+                </div>
+              );
+            })}
+          </dl>
+        ) : status === "claim_not_found" ? (
+          <div className="pcn-claim-detail-body">
+            <p className="pcn-claim-detail-explanation">
+              {UNVERIFIED_MESSAGES.claim_not_found.explanation}
+            </p>
+            <p className="pcn-claim-detail-suggestion">
+              {UNVERIFIED_MESSAGES.claim_not_found.suggestion}
+            </p>
+            <dl className="pcn-claim-detail-list">
+              <div className="pcn-claim-detail-row">
+                <dt className="pcn-claim-detail-label">Claim ID</dt>
+                <dd className="pcn-claim-detail-value">{id}</dd>
               </div>
-            );
-          })}
-        </dl>
+            </dl>
+          </div>
+        ) : (
+          <div className="pcn-claim-detail-body">
+            <p className="pcn-claim-detail-explanation">
+              {UNVERIFIED_MESSAGES.policy_failed.explanation}
+            </p>
+            <p className="pcn-claim-detail-suggestion">
+              {UNVERIFIED_MESSAGES.policy_failed.suggestion}
+            </p>
+            <dl className="pcn-claim-detail-list">
+              <div className="pcn-claim-detail-row">
+                <dt className="pcn-claim-detail-label">Displayed</dt>
+                <dd className="pcn-claim-detail-value">{innerText || "—"}</dd>
+              </div>
+              {claim?.value != null && (
+                <div className="pcn-claim-detail-row">
+                  <dt className="pcn-claim-detail-label">Source value</dt>
+                  <dd className="pcn-claim-detail-value">{formatSourceValue(claim.value)}</dd>
+                </div>
+              )}
+              <div className="pcn-claim-detail-row">
+                <dt className="pcn-claim-detail-label">Display rule</dt>
+                <dd className="pcn-claim-detail-value">{formatPolicyDescription(policy)}</dd>
+              </div>
+            </dl>
+          </div>
+        )}
       </span>
     ) : null;
 
@@ -234,9 +312,9 @@ export function ClaimMark({
         data-pcn-claim-id={id}
         className="pcn-claim"
         id={id}
-        onMouseEnter={openTooltip}
+        onMouseEnter={openTooltipIfContent}
         onMouseLeave={scheduleHide}
-        onFocus={() => detailLines.length > 0 && setTooltipOpen(true)}
+        onFocus={() => hasTooltipContent && setTooltipOpen(true)}
         onBlur={() => setTooltipOpen(false)}
       >
         {children}
@@ -244,17 +322,11 @@ export function ClaimMark({
           className={ok ? "verified-mark" : "verify-pending"}
           title={markTitle}
           role="img"
-          aria-label={ok ? "Verified" : "Needs verification"}
-          aria-describedby={detailLines.length > 0 ? detailId : undefined}
+          aria-label={ariaLabel}
+          aria-describedby={hasTooltipContent ? detailId : undefined}
         >
           {ok ? "✓" : "⚠"}
         </sup>
-        {showPendingValue && (
-          <span className="pcn-pending-value" title={title} aria-hidden="true">
-            {" "}
-            (Actual: {formatSourceValue(claim.value)})
-          </span>
-        )}
       </span>
       {tooltipContent != null && createPortal(tooltipContent, document.body)}
     </>

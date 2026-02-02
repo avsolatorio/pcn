@@ -60,6 +60,22 @@
   color: #374151;
 }
 
+.pcn-claim-detail-body {
+  margin: 0;
+}
+
+.pcn-claim-detail-explanation {
+  margin: 0 0 6px;
+  color: #4b5563;
+}
+
+.pcn-claim-detail-suggestion {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
 .pcn-claim-detail-list {
   margin: 0;
   padding: 0;
@@ -111,4 +127,14 @@
 :root.dark .pcn-claim-detail-value,
 [data-theme="dark"] .pcn-claim-detail-value {
   color: #f3f4f6;
+}
+
+:root.dark .pcn-claim-detail-explanation,
+[data-theme="dark"] .pcn-claim-detail-explanation {
+  color: #d1d5db;
+}
+
+:root.dark .pcn-claim-detail-suggestion,
+[data-theme="dark"] .pcn-claim-detail-suggestion {
+  color: #9ca3af;
 }
